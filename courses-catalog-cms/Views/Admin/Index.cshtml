@@ -1,0 +1,30 @@
+﻿@{
+    ViewData["Title"] = "Panel Administratora";
+}
+<h2 class="mb-4">Witaj w Panelu Zarządzania!</h2>
+<div class="row g-4">
+    <div class="col-md-4">
+        <div class="card bg-light">
+            <div class="card-body text-center">
+                <h5 class="card-title">Zarządzaj Kursami</h5>
+                <a asp-controller="Courses" asp-action="Index" class="btn btn-primary mt-2">Przejdź</a>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-4">
+        <div class="card bg-light">
+            <div class="card-body text-center">
+                <h5 class="card-title">Zarządzaj Kategoriami</h5>
+                <a asp-controller="Categories" asp-action="Index" class="btn btn-primary mt-2">Przejdź</a>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-4">
+        <div class="card bg-light">
+            <div class="card-body text-center">
+                <h5 class="card-title">Zarządzaj Trenerami</h5>
+                <a asp-controller="Trainers" asp-action="Index" class="btn btn-primary mt-2">Przejdź</a>
+            </div>
+        </div>
+    </div>
+</div>

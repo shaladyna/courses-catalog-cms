@@ -1,0 +1,30 @@
+﻿@{
+    ViewData["Title"] = "Logowanie do CMS";
+}
+
+<div class="row justify-content-center mt-5">
+    <div class="col-md-4">
+        <div class="card shadow">
+            <div class="card-body">
+                <h3 class="card-title text-center mb-4">Logowanie Administratora</h3>
+
+                @if (ViewBag.Error != null)
+                {
+                    <div class="alert alert-danger">@ViewBag.Error</div>
+                }
+
+                <form asp-action="Login" method="post">
+                    <div class="mb-3">
+                        <label class="form-label">Login</label>
+                        <input type="text" name="username" class="form-control" required />
+                    </div>
+                    <div class="mb-3">
+                        <label class="form-label">Hasło</label>
+                        <input type="password" name="password" class="form-control" required />
+                    </div>
+                    <button type="submit" class="btn btn-primary w-100">Zaloguj się</button>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
