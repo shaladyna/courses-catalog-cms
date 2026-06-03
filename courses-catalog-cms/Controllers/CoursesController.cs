@@ -1,4 +1,6 @@
-﻿using System;
+﻿using System.IO;
+using Microsoft.AspNetCore.Hosting;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
@@ -13,10 +15,12 @@ namespace courses_catalog_cms.Controllers
     public class CoursesController : Controller
     {
         private readonly ApplicationDbContext _context;
+        private readonly IWebHostEnvironment _webHostEnvironment;
 
-        public CoursesController(ApplicationDbContext context)
+        public CoursesController(ApplicationDbContext context, IWebHostEnvironment webHostEnvironment)
         {
             _context = context;
+            _webHostEnvironment = webHostEnvironment;
         }
 
         // GET: Courses
@@ -59,14 +63,40 @@ namespace courses_catalog_cms.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("Id,Title,Description,Price,ImageUrl,CategoryId,TrainerId")] Course course)
+        public async Task<IActionResult> Create([Bind("Id,Title,Description,Price,CategoryId,TrainerId")] Course course, IFormFile? imageFile)
         {
             if (ModelState.IsValid)
             {
+                if (imageFile != null && imageFile.Length > 0)
+                {
+                    string uniqueFileName = Guid.NewGuid().ToString() + "_" + Path.GetFileName(imageFile.FileName);
+
+                    string uploadsFolder = Path.Combine(_webHostEnvironment.WebRootPath, "images");
+
+                    if (!Directory.Exists(uploadsFolder))
+                    {
+                        Directory.CreateDirectory(uploadsFolder);
+                    }
+
+                    string filePath = Path.Combine(uploadsFolder, uniqueFileName);
+
+                    using (var fileStream = new FileStream(filePath, FileMode.Create))
+                    {
+                        await imageFile.CopyToAsync(fileStream);
+                    }
+
+                    course.ImageUrl = "/images/" + uniqueFileName;
+                }
+                else
+                {
+                    course.ImageUrl = "/images/default-course.jpg";
+                }
+
                 _context.Add(course);
                 await _context.SaveChangesAsync();
                 return RedirectToAction(nameof(Index));
             }
+
             ViewData["CategoryId"] = new SelectList(_context.Categories, "Id", "Name", course.CategoryId);
             ViewData["TrainerId"] = new SelectList(_context.Trainers, "Id", "FullName", course.TrainerId);
             return View(course);
@@ -95,7 +125,7 @@ namespace courses_catalog_cms.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("Id,Title,Description,Price,ImageUrl,CategoryId,TrainerId")] Course course)
+        public async Task<IActionResult> Edit(int id, [Bind("Id,Title,Description,Price,CategoryId,TrainerId,ImageUrl")] Course course, IFormFile? imageFile)
         {
             if (id != course.Id)
             {
@@ -106,6 +136,30 @@ namespace courses_catalog_cms.Controllers
             {
                 try
                 {
+                    // Sprawdzamy, czy użytkownik wgrał nowe zdjęcie
+                    if (imageFile != null && imageFile.Length > 0)
+                    {
+                        string uniqueFileName = Guid.NewGuid().ToString() + "_" + Path.GetFileName(imageFile.FileName);
+                        string uploadsFolder = Path.Combine(_webHostEnvironment.WebRootPath, "images");
+
+                        if (!Directory.Exists(uploadsFolder))
+                        {
+                            Directory.CreateDirectory(uploadsFolder);
+                        }
+
+                        string filePath = Path.Combine(uploadsFolder, uniqueFileName);
+
+                        using (var fileStream = new FileStream(filePath, FileMode.Create))
+                        {
+                            await imageFile.CopyToAsync(fileStream);
+                        }
+
+                        // Nadpisujemy starą ścieżkę nową
+                        course.ImageUrl = "/images/" + uniqueFileName;
+                    }
+                    // Jeśli imageFile == null, course.ImageUrl po prostu zachowa starą wartość 
+                    // dzięki ukrytemu polu (hidden input), które dodaliśmy w widoku HTML!
+
                     _context.Update(course);
                     await _context.SaveChangesAsync();
                 }

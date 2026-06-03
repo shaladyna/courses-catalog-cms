@@ -46,7 +46,7 @@
                 @Html.DisplayFor(modelItem => item.Price)
             </td>
             <td>
-                @Html.DisplayFor(modelItem => item.ImageUrl)
+                <img src="@item.ImageUrl" alt="Miniaturka" style="max-width: 100px; height: auto; border-radius: 5px;" />
             </td>
             <td>
                 @Html.DisplayFor(modelItem => item.Category.Name)
