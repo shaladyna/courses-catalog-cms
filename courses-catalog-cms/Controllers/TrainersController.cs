@@ -8,6 +8,8 @@ using Microsoft.EntityFrameworkCore;
 using courses_catalog_cms.Data;
 using courses_catalog_cms.Models;
 using Microsoft.AspNetCore.Authorization;
+using System.IO;
+using Microsoft.AspNetCore.Hosting;
 
 namespace courses_catalog_cms.Controllers
 {
@@ -16,10 +18,12 @@ namespace courses_catalog_cms.Controllers
     {
 
         private readonly ApplicationDbContext _context;
+        private readonly IWebHostEnvironment _webHostEnvironment;
 
-        public TrainersController(ApplicationDbContext context)
+        public TrainersController(ApplicationDbContext context, IWebHostEnvironment webHostEnvironment)
         {
             _context = context;
+            _webHostEnvironment = webHostEnvironment;
         }
 
         // GET: Trainers
@@ -57,10 +61,25 @@ namespace courses_catalog_cms.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("Id,FullName,Bio,ImageUrl")] Trainer trainer)
+        public async Task<IActionResult> Create([Bind("Id,FullName,Bio")] Trainer trainer, IFormFile? imageFile)
         {
             if (ModelState.IsValid)
             {
+                if (imageFile != null && imageFile.Length > 0)
+                {
+                    string uniqueFileName = Guid.NewGuid().ToString() + "_" + Path.GetFileName(imageFile.FileName);
+                    string uploadsFolder = Path.Combine(_webHostEnvironment.WebRootPath, "images");
+
+                    if (!Directory.Exists(uploadsFolder)) Directory.CreateDirectory(uploadsFolder);
+
+                    string filePath = Path.Combine(uploadsFolder, uniqueFileName);
+                    using (var fileStream = new FileStream(filePath, FileMode.Create))
+                    {
+                        await imageFile.CopyToAsync(fileStream);
+                    }
+                    trainer.ImageUrl = "/images/" + uniqueFileName;
+                }
+
                 _context.Add(trainer);
                 await _context.SaveChangesAsync();
                 return RedirectToAction(nameof(Index));
@@ -89,30 +108,34 @@ namespace courses_catalog_cms.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("Id,FullName,Bio,ImageUrl")] Trainer trainer)
+        public async Task<IActionResult> Edit(int id, [Bind("Id,FullName,Bio,ImageUrl")] Trainer trainer, IFormFile? imageFile)
         {
-            if (id != trainer.Id)
-            {
-                return NotFound();
-            }
+            if (id != trainer.Id) return NotFound();
 
             if (ModelState.IsValid)
             {
                 try
                 {
+                    if (imageFile != null && imageFile.Length > 0)
+                    {
+                        string uniqueFileName = Guid.NewGuid().ToString() + "_" + Path.GetFileName(imageFile.FileName);
+                        string uploadsFolder = Path.Combine(_webHostEnvironment.WebRootPath, "images");
+                        if (!Directory.Exists(uploadsFolder)) Directory.CreateDirectory(uploadsFolder);
+
+                        string filePath = Path.Combine(uploadsFolder, uniqueFileName);
+                        using (var fileStream = new FileStream(filePath, FileMode.Create))
+                        {
+                            await imageFile.CopyToAsync(fileStream);
+                        }
+                        trainer.ImageUrl = "/images/" + uniqueFileName;
+                    }
                     _context.Update(trainer);
                     await _context.SaveChangesAsync();
                 }
                 catch (DbUpdateConcurrencyException)
                 {
-                    if (!TrainerExists(trainer.Id))
-                    {
-                        return NotFound();
-                    }
-                    else
-                    {
-                        throw;
-                    }
+                    if (!TrainerExists(trainer.Id)) return NotFound();
+                    else throw;
                 }
                 return RedirectToAction(nameof(Index));
             }

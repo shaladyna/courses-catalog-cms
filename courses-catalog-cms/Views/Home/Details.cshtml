@@ -40,9 +40,16 @@
 
                     <h5 class="fw-bold mb-3">Twój prowadzący:</h5>
                     <div class="d-flex align-items-center mb-3">
-                        <div class="bg-light rounded-circle d-flex align-items-center justify-content-center text-primary shadow-sm" style="width: 55px; height: 55px;">
-                            <i class="bi bi-person-fill fs-2"></i>
-                        </div>
+                        @if (!string.IsNullOrEmpty(Model.Trainer?.ImageUrl))
+                        {
+                            <img src="@Model.Trainer.ImageUrl" alt="@Model.Trainer.FullName" class="rounded-circle shadow-sm" style="width: 55px; height: 55px; object-fit: cover; border: 2px solid #4f46e5;" />
+                        }
+                        else
+                        {
+                            <div class="bg-light rounded-circle d-flex align-items-center justify-content-center text-primary shadow-sm" style="width: 55px; height: 55px;">
+                                <i class="bi bi-person-fill fs-2"></i>
+                            </div>
+                        }
                         <div class="ms-3">
                             <h6 class="mb-0 fw-bold fs-5 text-dark">@Model.Trainer?.FullName</h6>
                         </div>
