@@ -68,3 +68,39 @@ body {
     position: relative;
     z-index: 10;
 }
+/* Elegancka stopka na dole strony */
+.footer-custom {
+    background-color: #111827; /* Bardzo ciemny, ekskluzywny granat */
+    color: #d1d5db;
+    padding: 4rem 0 1.5rem 0;
+    margin-top: 5rem;
+}
+
+    .footer-custom h5 {
+        color: #ffffff;
+        font-weight: 600;
+        margin-bottom: 1.2rem;
+        font-size: 1.1rem;
+    }
+
+    .footer-custom a {
+        color: #9ca3af;
+        text-decoration: none;
+        transition: color 0.2s ease;
+    }
+
+        .footer-custom a:hover {
+            color: #ffffff;
+            text-decoration: none;
+        }
+
+    .footer-custom .bi {
+        font-size: 1.1rem;
+    }
+
+.footer-bottom {
+    border-top: 1px solid #374151;
+    padding-top: 1.5rem;
+    margin-top: 3rem;
+    font-size: 0.875rem;
+}

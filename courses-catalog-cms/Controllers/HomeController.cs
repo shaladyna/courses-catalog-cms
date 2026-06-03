@@ -41,6 +41,25 @@ namespace courses_catalog_cms.Controllers
 
             return View(await courses.ToListAsync());
         }
+        public async Task<IActionResult> Details(int? id)
+        {
+            if (id == null)
+            {
+                return NotFound();
+            }
+
+            var course = await _context.Courses
+                .Include(c => c.Category)
+                .Include(c => c.Trainer)
+                .FirstOrDefaultAsync(m => m.Id == id);
+
+            if (course == null)
+            {
+                return NotFound();
+            }
+
+            return View(course);
+        }
         public IActionResult Privacy()
         {
             return View();

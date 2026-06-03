@@ -58,9 +58,43 @@
         </main>
     </div>
 
-    <footer class="border-top footer text-muted">
+    <footer class="footer-custom">
         <div class="container">
-            &copy; 2026 - courses_catalog_cms - <a asp-area="" asp-controller="Home" asp-action="Privacy">Privacy</a>
+            <div class="row">
+                <div class="col-lg-4 mb-4 mb-lg-0">
+                    <h5 class="d-flex align-items-center gap-2">
+                        <i class="bi bi-mortarboard-fill text-primary"></i> EduCatalog CMS
+                    </h5>
+                    <p class="small mb-3 opacity-75" style="line-height: 1.6;">
+                        Nowoczesna platforma edukacyjna łącząca pasjonatów wiedzy z najlepszymi ekspertami w branży. Ucz się we własnym tempie.
+                    </p>
+                </div>
+
+                <div class="col-lg-4 mb-4 mb-lg-0">
+                    <h5>Szybkie linki</h5>
+                    <ul class="list-unstyled d-flex flex-column gap-2 small">
+                        <li><a asp-area="" asp-controller="Home" asp-action="Index">Przeglądaj kursy</a></li>
+                        <li><a asp-area="" asp-controller="Home" asp-action="Privacy">Polityka prywatności</a></li>
+                        @if (!User.Identity.IsAuthenticated)
+                        {
+                            <li><a asp-area="" asp-controller="Account" asp-action="Login">Zaloguj do systemu</a></li>
+                        }
+                    </ul>
+                </div>
+
+                <div class="col-lg-4">
+                    <h5>Kontakt</h5>
+                    <ul class="list-unstyled d-flex flex-column gap-2 small opacity-75">
+                        <li><i class="bi bi-envelope-fill me-2 text-primary"></i> kontakt@educatalog.pl</li>
+                        <li><i class="bi bi-telephone-fill me-2 text-primary"></i> +48 123 456 789</li>
+                        <li><i class="bi bi-geo-alt-fill me-2 text-primary"></i> ul. Akademicka 1, 00-000 Warszawa</li>
+                    </ul>
+                </div>
+            </div>
+
+            <div class="footer-bottom text-center opacity-50">
+                &copy; 2026 - EduCatalog CMS. Projekt zrealizowany w ramach zaliczenia.
+            </div>
         </div>
     </footer>
     <script src="~/lib/jquery/dist/jquery.min.js"></script>
