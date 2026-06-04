@@ -1,47 +1,75 @@
 ﻿@model IEnumerable<courses_catalog_cms.Models.Trainer>
 
 @{
-    ViewData["Title"] = "Index";
+    ViewData["Title"] = "Zarządzanie Trenerami";
 }
 
-<h1>Index</h1>
+<div class="container my-5">
+    <div class="d-flex justify-content-between align-items-center mb-4">
+        <h2 class="fw-bold mb-0"><i class="bi bi-person-badge-fill text-primary me-2"></i> Baza Prowadzących</h2>
+        <a asp-action="Create" class="btn btn-primary shadow-sm fw-medium">
+            <i class="bi bi-plus-lg me-1"></i> Dodaj nowego trenera
+        </a>
+    </div>
 
-<p>
-    <a asp-action="Create">Create New</a>
-</p>
-<table class="table">
-    <thead>
-        <tr>
-            <th>
-                @Html.DisplayNameFor(model => model.FullName)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.Bio)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.ImageUrl)
-            </th>
-            <th></th>
-        </tr>
-    </thead>
-    <tbody>
-@foreach (var item in Model) {
-        <tr>
-            <td>
-                @Html.DisplayFor(modelItem => item.FullName)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Bio)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.ImageUrl)
-            </td>
-            <td>
-                <a asp-action="Edit" asp-route-id="@item.Id">Edit</a> |
-                <a asp-action="Details" asp-route-id="@item.Id">Details</a> |
-                <a asp-action="Delete" asp-route-id="@item.Id">Delete</a>
-            </td>
-        </tr>
-}
-    </tbody>
-</table>
+    <div class="card shadow-sm border-0 rounded-4 overflow-hidden">
+        <div class="card-body p-0">
+            <div class="table-responsive">
+                <table class="table table-hover align-middle mb-0">
+                    <thead class="bg-light">
+                        <tr>
+                            <th class="px-4 py-3 text-muted">Imię i nazwisko</th>
+                            <th class="px-4 py-3 text-muted" style="max-width: 350px;">Biogram</th>
+                            <th class="px-4 py-3 text-muted text-center">Zdjęcie profilowe</th>
+                            <th class="px-4 py-3 text-muted text-end">Akcje</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach (var item in Model)
+                        {
+                            <tr>
+                                <td class="px-4 fw-bold text-dark">
+                                    @item.FullName
+                                </td>
+                                <td class="px-4 text-secondary" style="max-width: 350px;">
+                                    @(item.Bio != null && item.Bio.Length > 100 ? item.Bio.Substring(0, 100) + "..." : item.Bio)
+                                </td>
+                                <td class="px-4 text-center">
+                                    @if (!string.IsNullOrEmpty(item.ImageUrl))
+                                    {
+                                        <img src="@item.ImageUrl" alt="@item.FullName" class="rounded-circle shadow-sm" style="width: 50px; height: 50px; object-fit: cover; border: 2px solid #e5e7eb;" />
+                                    }
+                                    else
+                                    {
+                                        <div class="bg-light rounded-circle d-inline-flex align-items-center justify-content-center text-secondary shadow-sm" style="width: 50px; height: 50px; border: 2px solid #e5e7eb;">
+                                            <i class="bi bi-person-fill fs-4"></i>
+                                        </div>
+                                    }
+                                </td>
+                                <td class="px-4 text-end">
+                                    <div class="d-flex gap-2 justify-content-end">
+                                        <a asp-action="Edit" asp-route-id="@item.Id" class="btn btn-sm btn-outline-primary fw-medium px-3">
+                                            Edytuj
+                                        </a>
+                                        <a asp-action="Details" asp-route-id="@item.Id" class="btn btn-sm btn-outline-info fw-medium px-3">
+                                            Szczegóły
+                                        </a>
+                                        <a asp-action="Delete" asp-route-id="@item.Id" class="btn btn-sm btn-outline-danger fw-medium px-3">
+                                            Usuń
+                                        </a>
+                                    </div>
+                                </td>
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+            </div>
+            @if (!Model.Any())
+            {
+                <div class="text-center p-5">
+                    <h5 class="text-muted">Brak trenerów w bazie.</h5>
+                </div>
+            }
+        </div>
+    </div>
+</div>
