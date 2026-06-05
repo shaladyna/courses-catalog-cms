@@ -1,57 +1,51 @@
 ﻿@model courses_catalog_cms.Models.Course
 
 @{
-    ViewData["Title"] = "Delete";
+    ViewData["Title"] = "Usuń kurs";
 }
 
-<h1>Delete</h1>
+<div class="container my-5">
+    <div class="row justify-content-center">
+        <div class="col-md-6">
+            <div class="card shadow border-0 rounded-4 overflow-hidden">
+                <div class="bg-danger p-4 text-center text-white">
+                    <i class="bi bi-exclamation-triangle-fill display-4 d-block mb-2"></i>
+                    <h3 class="fw-bold mb-0">Czy na pewno chcesz usunąć ten kurs?</h3>
+                    <p class="mb-0 opacity-75 small">Ta operacja jest nieodwracalna.</p>
+                </div>
 
-<h3>Are you sure you want to delete this?</h3>
-<div>
-    <h4>Course</h4>
-    <hr />
-    <dl class="row">
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.Title)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.Title)
-        </dd>
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.Description)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.Description)
-        </dd>
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.Price)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.Price)
-        </dd>
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.ImageUrl)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.ImageUrl)
-        </dd>
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.Category)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.Category.Name)
-        </dd>
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.Trainer)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.Trainer.FullName)
-        </dd>
-    </dl>
-    
-    <form asp-action="Delete">
-        <input type="hidden" asp-for="Id" />
-        <input type="submit" value="Delete" class="btn btn-danger" /> |
-        <a asp-action="Index">Back to List</a>
-    </form>
+                <div class="card-body p-4 p-md-5 text-center">
+                    <h6 class="text-muted text-uppercase small fw-bold mb-1">Usuwany element:</h6>
+                    <h4 class="fw-bold text-dark mb-4">@Model.Title</h4>
+
+                    <div class="bg-light rounded-3 p-3 border mb-4 text-start small">
+                        <div class="d-flex justify-content-between mb-2">
+                            <span class="text-muted">Kategoria:</span>
+                            <span class="fw-bold text-dark">@Model.Category?.Name</span>
+                        </div>
+                        <div class="d-flex justify-content-between mb-2">
+                            <span class="text-muted">Prowadzący:</span>
+                            <span class="fw-bold text-dark">@Model.Trainer?.FullName</span>
+                        </div>
+                        <div class="d-flex justify-content-between">
+                            <span class="text-muted">Cena:</span>
+                            <span class="fw-bold text-success">@Model.Price.ToString("C")</span>
+                        </div>
+                    </div>
+
+                    <form asp-action="Delete">
+                        <input type="hidden" asp-for="Id" />
+                        <div class="d-grid gap-2">
+                            <button type="submit" class="btn btn-danger btn-lg fw-bold shadow-sm">
+                                <i class="bi bi-trash-fill me-2"></i> Tak, usuń bezpowrotnie
+                            </button>
+                            <a asp-action="Index" class="btn btn-outline-secondary btn-lg fw-medium">
+                                Anuluj i wróć
+                            </a>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
 </div>
