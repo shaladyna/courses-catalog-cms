@@ -1,42 +1,60 @@
 ﻿@model courses_catalog_cms.Models.Trainer
 
 @{
-    ViewData["Title"] = "Create";
+    ViewData["Title"] = "Dodaj nowego trenera";
 }
 
-<h1>Create</h1>
+<div class="container my-5">
+    <div class="row justify-content-center">
+        <div class="col-md-8">
+            <!-- Nagłówek -->
+            <div class="d-flex justify-content-between align-items-center mb-4">
+                <h2 class="fw-bold mb-0 text-success"><i class="bi bi-person-plus-fill me-2"></i>Dodaj trenera</h2>
+                <a asp-action="Index" class="btn btn-outline-secondary fw-medium shadow-sm">
+                    <i class="bi bi-arrow-left me-1"></i> Wróć do listy
+                </a>
+            </div>
 
-<h4>Trainer</h4>
-<hr />
-<div class="row">
-    <div class="col-md-4">
-        <form asp-action="Create" enctype="multipart/form-data">
-            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
-            <div class="form-group">
-                <label asp-for="FullName" class="control-label"></label>
-                <input asp-for="FullName" class="form-control" />
-                <span asp-validation-for="FullName" class="text-danger"></span>
+            <!-- Karta formularza -->
+            <div class="card shadow-sm border-0 rounded-4">
+                <div class="card-body p-4 p-md-5">
+                    <form asp-action="Create" enctype="multipart/form-data">
+                        <div asp-validation-summary="ModelOnly" class="text-danger mb-3"></div>
+
+                        <div class="form-group mb-4">
+                            <label asp-for="FullName" class="form-label fw-bold text-muted">Imię i nazwisko</label>
+                            <input asp-for="FullName" class="form-control form-control-lg bg-light" placeholder="np. Jan Kowalski" />
+                            <span asp-validation-for="FullName" class="text-danger"></span>
+                        </div>
+
+                        <div class="form-group mb-4">
+                            <label asp-for="Bio" class="form-label fw-bold text-muted">Biogram (Opis)</label>
+                            <textarea asp-for="Bio" class="form-control bg-light" rows="5" placeholder="Napisz kilka słów o doświadczeniu i umiejętnościach trenera..."></textarea>
+                            <span asp-validation-for="Bio" class="text-danger"></span>
+                        </div>
+
+                        <div class="form-group mb-5 p-4 bg-light rounded-3 border border-dashed">
+                            <label for="imageFile" class="form-label fw-bold text-dark d-block mb-2">
+                                <i class="bi bi-camera-fill text-primary me-2"></i>Zdjęcie profilowe
+                            </label>
+                            <input type="file" name="imageFile" id="imageFile" class="form-control" accept="image/*" />
+                            <div class="form-text mt-2 text-muted">Wybierz zdjęcie, na którym wyraźnie widać twarz (najlepiej w proporcjach 1:1 - kwadrat).</div>
+                        </div>
+
+                        <div class="d-grid">
+                            <button type="submit" class="btn btn-success btn-lg shadow-sm fw-bold">
+                                <i class="bi bi-check2-circle me-2"></i> Zapisz do bazy
+                            </button>
+                        </div>
+                    </form>
+                </div>
             </div>
-            <div class="form-group">
-                <label asp-for="Bio" class="control-label"></label>
-                <input asp-for="Bio" class="form-control" />
-                <span asp-validation-for="Bio" class="text-danger"></span>
-            </div>
-            <div class="form-group mb-3">
-                <label for="imageFile" class="control-label">Zdjęcie prowadzącego (Profilowe)</label>
-                <input type="file" name="imageFile" id="imageFile" class="form-control" accept="image/*" />
-            </div>
-            <div class="form-group">
-                <input type="submit" value="Create" class="btn btn-primary" />
-            </div>
-        </form>
+        </div>
     </div>
 </div>
 
-<div>
-    <a asp-action="Index">Back to List</a>
-</div>
-
 @section Scripts {
-    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+    @{
+        await Html.RenderPartialAsync("_ValidationScriptsPartial");
+    }
 }

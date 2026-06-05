@@ -1,55 +1,85 @@
 ﻿@model courses_catalog_cms.Models.Course
 
 @{
-    ViewData["Title"] = "Create";
+    ViewData["Title"] = "Dodaj nowy kurs";
 }
 
-<h1>Create</h1>
+<div class="container my-5">
+    <div class="row justify-content-center">
+        <div class="col-md-8">
+            <div class="d-flex justify-content-between align-items-center mb-4">
+                <h2 class="fw-bold mb-0 text-success"><i class="bi bi-plus-circle-fill me-2"></i>Dodaj nowy kurs</h2>
+                <a asp-action="Index" class="btn btn-outline-secondary fw-medium shadow-sm">
+                    <i class="bi bi-arrow-left me-1"></i> Wróć do listy
+                </a>
+            </div>
 
-<h4>Course</h4>
-<hr />
-<div class="row">
-    <div class="col-md-4">
-        <form asp-action="Create" enctype="multipart/form-data">
-            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
-            <div class="form-group">
-                <label asp-for="Title" class="control-label"></label>
-                <input asp-for="Title" class="form-control" />
-                <span asp-validation-for="Title" class="text-danger"></span>
+            <div class="card shadow-sm border-0 rounded-4">
+                <div class="card-body p-4 p-md-5">
+                    <form asp-action="Create" enctype="multipart/form-data">
+                        <div asp-validation-summary="ModelOnly" class="text-danger mb-3"></div>
+
+                        <div class="form-group mb-4">
+                            <label asp-for="Title" class="form-label fw-bold text-muted">Tytuł kursu</label>
+                            <input asp-for="Title" class="form-control form-control-lg bg-light" placeholder="np. Masterclass z programowania w C#" />
+                            <span asp-validation-for="Title" class="text-danger"></span>
+                        </div>
+
+                        <div class="form-group mb-4">
+                            <label asp-for="Description" class="form-label fw-bold text-muted">Opis kursu</label>
+                            <textarea asp-for="Description" class="form-control bg-light" rows="5" placeholder="Opisz dokładnie, czego nauczą się kursanci..."></textarea>
+                            <span asp-validation-for="Description" class="text-danger"></span>
+                        </div>
+
+                        <div class="row">
+                            <div class="col-md-6 form-group mb-4">
+                                <label asp-for="Price" class="form-label fw-bold text-muted">Cena (PLN)</label>
+                                <div class="input-group">
+                                    <span class="input-group-text bg-white"><i class="bi bi-currency-dollar text-success"></i></span>
+                                    <input asp-for="Price" class="form-control bg-light" type="text" placeholder="0,00" />
+                                </div>
+                                <span asp-validation-for="Price" class="text-danger"></span>
+                            </div>
+
+                            <div class="col-md-6 form-group mb-4">
+                                <label asp-for="CategoryId" class="form-label fw-bold text-muted">Kategoria</label>
+                                <select asp-for="CategoryId" class="form-select bg-light" asp-items="ViewBag.CategoryId">
+                                    <option value="">-- Wybierz kategorię --</option>
+                                </select>
+                                <span asp-validation-for="CategoryId" class="text-danger"></span>
+                            </div>
+                        </div>
+
+                        <div class="form-group mb-4">
+                            <label asp-for="TrainerId" class="form-label fw-bold text-muted">Prowadzący</label>
+                            <select asp-for="TrainerId" class="form-select bg-light" asp-items="ViewBag.TrainerId">
+                                <option value="">-- Wybierz trenera --</option>
+                            </select>
+                            <span asp-validation-for="TrainerId" class="text-danger"></span>
+                        </div>
+
+                        <div class="form-group mb-5 p-4 bg-light rounded-3 border border-dashed">
+                            <label for="imageFile" class="form-label fw-bold text-dark d-block mb-2">
+                                <i class="bi bi-image text-primary me-2"></i>Miniaturka kursu
+                            </label>
+                            <input type="file" name="imageFile" id="imageFile" class="form-control" accept="image/*" />
+                            <div class="form-text mt-2 text-muted">Wybierz plik graficzny (JPG, PNG). Rekomendowane proporcje to 16:9.</div>
+                        </div>
+
+                        <div class="d-grid">
+                            <button type="submit" class="btn btn-success btn-lg shadow-sm fw-bold">
+                                <i class="bi bi-check2-circle me-2"></i> Dodaj kurs do bazy
+                            </button>
+                        </div>
+                    </form>
+                </div>
             </div>
-            <div class="form-group">
-                <label asp-for="Description" class="control-label"></label>
-                <input asp-for="Description" class="form-control" />
-                <span asp-validation-for="Description" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="Price" class="control-label"></label>
-                <input asp-for="Price" class="form-control" type="text" />
-                <span asp-validation-for="Price" class="text-danger"></span>
-            </div>
-            <div class="form-group mb-3">
-                <label for="imageFile" class="control-label">Wgraj grafikę kursu</label>
-                <input type="file" name="imageFile" id="imageFile" class="form-control" accept="image/*" />
-            </div>
-            <div class="form-group">
-                <label asp-for="CategoryId" class="control-label"></label>
-                <select asp-for="CategoryId" class ="form-control" asp-items="ViewBag.CategoryId"></select>
-            </div>
-            <div class="form-group">
-                <label asp-for="TrainerId" class="control-label"></label>
-                <select asp-for="TrainerId" class ="form-control" asp-items="ViewBag.TrainerId"></select>
-            </div>
-            <div class="form-group">
-                <input type="submit" value="Create" class="btn btn-primary" />
-            </div>
-        </form>
+        </div>
     </div>
 </div>
 
-<div>
-    <a asp-action="Index">Back to List</a>
-</div>
-
 @section Scripts {
-    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+    @{
+        await Html.RenderPartialAsync("_ValidationScriptsPartial");
+    }
 }

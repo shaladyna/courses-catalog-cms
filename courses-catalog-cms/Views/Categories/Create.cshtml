@@ -1,33 +1,44 @@
 ﻿@model courses_catalog_cms.Models.Category
 
 @{
-    ViewData["Title"] = "Create";
+    ViewData["Title"] = "Dodaj nową kategorię";
 }
 
-<h1>Create</h1>
+<div class="container my-5">
+    <div class="row justify-content-center">
+        <div class="col-md-8">
+            <div class="d-flex justify-content-between align-items-center mb-4">
+                <h2 class="fw-bold mb-0 text-success"><i class="bi bi-tag-fill me-2"></i>Dodaj nową kategorię</h2>
+                <a asp-action="Index" class="btn btn-outline-secondary fw-medium shadow-sm">
+                    <i class="bi bi-arrow-left me-1"></i> Wróć do listy
+                </a>
+            </div>
 
-<h4>Category</h4>
-<hr />
-<div class="row">
-    <div class="col-md-4">
-        <form asp-action="Create">
-            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
-            <div class="form-group">
-                <label asp-for="Name" class="control-label"></label>
-                <input asp-for="Name" class="form-control" />
-                <span asp-validation-for="Name" class="text-danger"></span>
+            <div class="card shadow-sm border-0 rounded-4">
+                <div class="card-body p-4 p-md-5">
+                    <form asp-action="Create">
+                        <div asp-validation-summary="ModelOnly" class="text-danger mb-3"></div>
+
+                        <div class="form-group mb-5">
+                            <label asp-for="Name" class="form-label fw-bold text-muted">Nazwa kategorii</label>
+                            <input asp-for="Name" class="form-control form-control-lg bg-light" placeholder="np. Marketing, IT, Rozwój osobisty..." />
+                            <span asp-validation-for="Name" class="text-danger"></span>
+                        </div>
+
+                        <div class="d-grid">
+                            <button type="submit" class="btn btn-success btn-lg shadow-sm fw-bold">
+                                <i class="bi bi-check2-circle me-2"></i> Zapisz do bazy
+                            </button>
+                        </div>
+                    </form>
+                </div>
             </div>
-            <div class="form-group">
-                <input type="submit" value="Create" class="btn btn-primary" />
-            </div>
-        </form>
+        </div>
     </div>
 </div>
 
-<div>
-    <a asp-action="Index">Back to List</a>
-</div>
-
 @section Scripts {
-    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+    @{
+        await Html.RenderPartialAsync("_ValidationScriptsPartial");
+    }
 }
