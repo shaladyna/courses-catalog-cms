@@ -110,25 +110,42 @@ namespace courses_catalog_cms.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Edit(int id, [Bind("Id,FullName,Bio,ImageUrl")] Trainer trainer, IFormFile? imageFile)
         {
-            if (id != trainer.Id) return NotFound();
+            if (id != trainer.Id)
+            {
+                return NotFound();
+            }
 
             if (ModelState.IsValid)
             {
                 try
                 {
+                    // Jeśli użytkownik wgrywa nowe zdjęcie
                     if (imageFile != null && imageFile.Length > 0)
                     {
-                        string uniqueFileName = Guid.NewGuid().ToString() + "_" + Path.GetFileName(imageFile.FileName);
-                        string uploadsFolder = Path.Combine(_webHostEnvironment.WebRootPath, "images");
-                        if (!Directory.Exists(uploadsFolder)) Directory.CreateDirectory(uploadsFolder);
-
-                        string filePath = Path.Combine(uploadsFolder, uniqueFileName);
-                        using (var fileStream = new FileStream(filePath, FileMode.Create))
+                        // 1. USUWANIE STAREGO ZDJĘCIA Z DYSKU
+                        if (!string.IsNullOrEmpty(trainer.ImageUrl))
                         {
-                            await imageFile.CopyToAsync(fileStream);
+                            // Budujemy ścieżkę do starego pliku
+                            var oldImagePath = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot", trainer.ImageUrl.TrimStart('/'));
+
+                            // Jeśli plik tam jest, usuwamy go
+                            if (System.IO.File.Exists(oldImagePath))
+                            {
+                                System.IO.File.Delete(oldImagePath);
+                            }
                         }
-                        trainer.ImageUrl = "/images/" + uniqueFileName;
+
+                        // 2. ZAPIS NOWEGO ZDJĘCIA
+                        var fileName = Guid.NewGuid().ToString() + Path.GetExtension(imageFile.FileName);
+                        var savePath = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot/images", fileName);
+
+                        using (var stream = new FileStream(savePath, FileMode.Create))
+                        {
+                            await imageFile.CopyToAsync(stream);
+                        }
+                        trainer.ImageUrl = "/images/" + fileName;
                     }
+
                     _context.Update(trainer);
                     await _context.SaveChangesAsync();
                 }
@@ -168,6 +185,16 @@ namespace courses_catalog_cms.Controllers
             var trainer = await _context.Trainers.FindAsync(id);
             if (trainer != null)
             {
+                // USUWANIE ZDJĘCIA Z DYSKU PRZY KASOWANIU TRENERA
+                if (!string.IsNullOrEmpty(trainer.ImageUrl))
+                {
+                    var imagePath = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot", trainer.ImageUrl.TrimStart('/'));
+                    if (System.IO.File.Exists(imagePath))
+                    {
+                        System.IO.File.Delete(imagePath);
+                    }
+                }
+
                 _context.Trainers.Remove(trainer);
             }
 

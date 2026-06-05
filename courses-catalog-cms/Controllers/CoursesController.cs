@@ -56,7 +56,7 @@ namespace courses_catalog_cms.Controllers
         public IActionResult Create()
         {
             ViewData["CategoryId"] = new SelectList(_context.Categories, "Id", "Name");
-            ViewData["TrainerId"] = new SelectList(_context.Trainers, "Id", "FullName");
+            ViewBag.Trainers = _context.Trainers.ToList();
             return View();
         }
 
@@ -117,8 +117,10 @@ namespace courses_catalog_cms.Controllers
             {
                 return NotFound();
             }
+
             ViewData["CategoryId"] = new SelectList(_context.Categories, "Id", "Name", course.CategoryId);
-            ViewData["TrainerId"] = new SelectList(_context.Trainers, "Id", "FullName", course.TrainerId);
+            ViewBag.Trainers = await _context.Trainers.ToListAsync();
+
             return View(course);
         }
 
@@ -127,7 +129,7 @@ namespace courses_catalog_cms.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("Id,Title,Description,Price,CategoryId,TrainerId,ImageUrl")] Course course, IFormFile? imageFile)
+        public async Task<IActionResult> Edit(int id, [Bind("Id,Title,Description,Price,ImageUrl,CategoryId,TrainerId")] Course course, IFormFile? imageFile)
         {
             if (id != course.Id)
             {
@@ -138,48 +140,44 @@ namespace courses_catalog_cms.Controllers
             {
                 try
                 {
-                    // Sprawdzamy, czy użytkownik wgrał nowe zdjęcie
+                    // Jeśli użytkownik wgrywa nową miniaturkę
                     if (imageFile != null && imageFile.Length > 0)
                     {
-                        string uniqueFileName = Guid.NewGuid().ToString() + "_" + Path.GetFileName(imageFile.FileName);
-                        string uploadsFolder = Path.Combine(_webHostEnvironment.WebRootPath, "images");
-
-                        if (!Directory.Exists(uploadsFolder))
+                        // 1. USUWANIE STAREGO ZDJĘCIA Z DYSKU
+                        if (!string.IsNullOrEmpty(course.ImageUrl))
                         {
-                            Directory.CreateDirectory(uploadsFolder);
+                            var oldImagePath = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot", course.ImageUrl.TrimStart('/'));
+                            if (System.IO.File.Exists(oldImagePath))
+                            {
+                                System.IO.File.Delete(oldImagePath);
+                            }
                         }
 
-                        string filePath = Path.Combine(uploadsFolder, uniqueFileName);
+                        // 2. ZAPIS NOWEGO ZDJĘCIA
+                        var fileName = Guid.NewGuid().ToString() + Path.GetExtension(imageFile.FileName);
+                        var savePath = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot/images", fileName);
 
-                        using (var fileStream = new FileStream(filePath, FileMode.Create))
+                        using (var stream = new FileStream(savePath, FileMode.Create))
                         {
-                            await imageFile.CopyToAsync(fileStream);
+                            await imageFile.CopyToAsync(stream);
                         }
-
-                        // Nadpisujemy starą ścieżkę nową
-                        course.ImageUrl = "/images/" + uniqueFileName;
+                        course.ImageUrl = "/images/" + fileName;
                     }
-                    // Jeśli imageFile == null, course.ImageUrl po prostu zachowa starą wartość 
-                    // dzięki ukrytemu polu (hidden input), które dodaliśmy w widoku HTML!
 
                     _context.Update(course);
                     await _context.SaveChangesAsync();
                 }
                 catch (DbUpdateConcurrencyException)
                 {
-                    if (!CourseExists(course.Id))
-                    {
-                        return NotFound();
-                    }
-                    else
-                    {
-                        throw;
-                    }
+                    if (!CourseExists(course.Id)) return NotFound();
+                    else throw;
                 }
                 return RedirectToAction(nameof(Index));
             }
+
+            // Zabezpieczenie na wypadek powrotu do formularza z błędem walidacji
             ViewData["CategoryId"] = new SelectList(_context.Categories, "Id", "Name", course.CategoryId);
-            ViewData["TrainerId"] = new SelectList(_context.Trainers, "Id", "FullName", course.TrainerId);
+            ViewBag.Trainers = await _context.Trainers.ToListAsync();
             return View(course);
         }
 
@@ -211,6 +209,15 @@ namespace courses_catalog_cms.Controllers
             var course = await _context.Courses.FindAsync(id);
             if (course != null)
             {
+                if (!string.IsNullOrEmpty(course.ImageUrl))
+                {
+                    var imagePath = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot", course.ImageUrl.TrimStart('/'));
+                    if (System.IO.File.Exists(imagePath))
+                    {
+                        System.IO.File.Delete(imagePath);
+                    }
+                }
+
                 _context.Courses.Remove(course);
             }
 
