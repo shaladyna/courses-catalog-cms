@@ -227,19 +227,19 @@ namespace courses_catalog_cms.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteConfirmed(int id)
         {
-            var course = await _context.Courses.FindAsync(id);
-            if (course != null)
+            // 1. ZABEZPIECZENIE: Sprawdzamy, czy w kategorii są kursy
+            bool hasCourses = await _context.Courses.AnyAsync(c => c.CategoryId == id);
+            if (hasCourses)
             {
-                if (!string.IsNullOrEmpty(course.ImageUrl))
-                {
-                    var imagePath = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot", course.ImageUrl.TrimStart('/'));
-                    if (System.IO.File.Exists(imagePath))
-                    {
-                        System.IO.File.Delete(imagePath);
-                    }
-                }
+                TempData["ErrorMessage"] = "Nie można usunąć tej kategorii, ponieważ zawiera aktywne kursy. Najpierw usuń kursy lub przenieś je do innej kategorii.";
+                return RedirectToAction(nameof(Delete), new { id = id });
+            }
 
-                _context.Courses.Remove(course);
+            // 2. Właściwe usuwanie
+            var category = await _context.Categories.FindAsync(id);
+            if (category != null)
+            {
+                _context.Categories.Remove(category);
             }
 
             await _context.SaveChangesAsync();

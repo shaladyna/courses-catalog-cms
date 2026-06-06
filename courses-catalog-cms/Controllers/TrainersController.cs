@@ -182,10 +182,19 @@ namespace courses_catalog_cms.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteConfirmed(int id)
         {
+            // 1. ZABEZPIECZENIE: Sprawdzamy, czy trener ma przypisane kursy
+            bool hasCourses = await _context.Courses.AnyAsync(c => c.TrainerId == id);
+            if (hasCourses)
+            {
+                TempData["ErrorMessage"] = "Nie można usunąć tego prowadzącego, ponieważ są do niego przypisane aktywne kursy. Najpierw usuń lub przypisz te kursy innemu trenerowi.";
+                return RedirectToAction(nameof(Delete), new { id = id });
+            }
+
+            // 2. Właściwe usuwanie
             var trainer = await _context.Trainers.FindAsync(id);
             if (trainer != null)
             {
-                // USUWANIE ZDJĘCIA Z DYSKU PRZY KASOWANIU TRENERA
+                // Usuwanie zdjęcia
                 if (!string.IsNullOrEmpty(trainer.ImageUrl))
                 {
                     var imagePath = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot", trainer.ImageUrl.TrimStart('/'));
@@ -194,7 +203,6 @@ namespace courses_catalog_cms.Controllers
                         System.IO.File.Delete(imagePath);
                     }
                 }
-
                 _context.Trainers.Remove(trainer);
             }
 
