@@ -1,14 +1,14 @@
 # EduCatalog CMS 🎓
 
-**EduCatalog CMS** to nowoczesny, lekki system zarządzania treścią (CMS) w architekturze MVP (Minimum Viable Product), dedykowany dla rynku platform e-learningowych, akademii szkoleniowych oraz niezależnych twórców internetowych. Aplikacja pozwala na kompleksowe zarządzanie katalogiem kursów, ich kategoriami oraz bazą prowadzących (trenerów).
+**EduCatalog CMS** to nowoczesny, lekki system zarządzania treścią w architekturze MVP, dedykowany dla rynku platform e-learningowych, akademii szkoleniowych oraz niezależnych twórców internetowych. Aplikacja pozwala na kompleksowe zarządzanie katalogiem kursów, ich kategoriami oraz bazą prowadzących.
 
-Projekt został zbudowany w oparciu o platformę **.NET 8** przy użyciu wzorca **ASP.NET Core MVC** z silnym naciskiem na optymalizację wydajnościową (Backend) oraz zaawansowane wrażenia użytkownika (UX/UI Frontend).
+Projekt został zbudowany w oparciu o platformę **.NET 8** przy użyciu wzorca **ASP.NET Core MVC** z silnym naciskiem na optymalizację wydajnościową oraz zaawansowane wrażenia użytkownika.
 
 ---
 
 ## 💼 Wartość Biznesowa projektu
 
-Większość dostępnych na rynku systemów LMS (Learning Management System) jest droga, przeładowana funkcjami i trudna w konfiguracji. **EduCatalog CMS** rozwiązuje ten problem, dostarczając dedykowane narzędzie marketingowo-sprzedażowe:
+Większość dostępnych na rynku systemów LMS jest droga, przeładowana funkcjami i trudna w konfiguracji. **EduCatalog CMS** rozwiązuje ten problem, dostarczając dedykowane narzędzie marketingowo-sprzedażowe:
 1. **Zwiększenie Konwersji Sprzedażowej:** Dzięki architekturze *Mobile-First* oraz zaawansowanemu filtrowaniu, potencjalny klient może znaleźć i przejrzeć ofertę szkoleniową w kilka sekund na dowolnym urządzeniu.
 2. **Optymalizacja czasu pracy administratora:** Przemyślany panel zarządzania automatyzuje powtarzalne procesy i skraca czas wprowadzania oferty (np. poprzez dynamiczne podglądy danych).
 3. **Redukcja kosztów utrzymania infrastruktury:** Wbudowane mechanizmy czyszczenia zasobów serwera zapobiegają marnowaniu przestrzeni dyskowej w chmurze szkoleniowej.
@@ -24,13 +24,11 @@ Większość dostępnych na rynku systemów LMS (Learning Management System) jes
 * **Garbage Collection dla multimediów:** Autorski mechanizm czyszczenia dysku. W momencie usunięcia kursu/trenera lub zmiany grafiki na nową, stary plik jest **fizycznie usuwany** z folderu `wwwroot/images`, eliminując powstawanie tzw. "plików osieroconych".
 
 ### 🔹 Frontend i Zaawansowany UX/UI
-* **100% Responsywność (RWD):** Projekt zrealizowany w myśl zasady *Mobile-First* przy użyciu frameworka Bootstrap 5. Interfejs płynnie dostosowuje się do ekranów smartfonów, tabletów i komputerów stacjonarnych.
+* **Responsywność RWD:** Projekt zrealizowany w myśl zasady *Mobile-First* przy użyciu frameworka Bootstrap 5. Interfejs płynnie dostosowuje się do ekranów smartfonów, tabletów i komputerów stacjonarnych.
 * **Wyszukiwarka z filtrowaniem dynamicznym:** Możliwość jednoczesnego przeszukiwania tekstu i filtrowania katalogu według kategorii szkoleniowych.
 * **Wydajna Paginacja (Stronicowanie):** Wyniki na stronie głównej są porcjowane po 9 elementów (układ siatki 3x3) przy użyciu metod LINQ (`.Skip()` i `.Take()`), co optymalizuje czas ładowania i zapobiega przeciążeniu bazy danych. Paginacja została ostylowana w nowoczesnym formacie pigułek (*pills*) z jasną nawigacją tekstową.
-* **Dynamiczny podgląd trenera (JavaScript):** Podczas tworzenia lub edycji kursu, wybranie prowadzącego z listy rozwijanej natychmiastowo generuje pod spodem mikro-kartę z jego zdjęciem oraz biogramem. Administrator widzi specjalizację trenera bez konieczności opuszczania formularza.
-* **Profesjonalne Ekrany Ostrzegawcze:** Widoki usuwania (`Delete.cshtml`) zostały przeprojektowane na e-komercyjne alerty bezpieczeństwa informujące o integralności bazy danych (ochrona przed usunięciem trenera/kategorii powiązanych z aktywnymi kursami).
-* **Personalizowany Favicon SVG:** Domyślna ikona Microsoftu została zastąpiona nowoczesną, skalowalną ikoną wektorową SVG (Data URI) przedstawiającą czapkę akademicką, spójną z marką projektu.
-
+* **Dynamiczny podgląd trenera:** Podczas tworzenia lub edycji kursu, wybranie prowadzącego z listy rozwijanej natychmiastowo generuje pod spodem mikro-kartę z jego zdjęciem oraz biogramem. Administrator widzi specjalizację trenera bez konieczności opuszczania formularza.
+* **Ekrany Ostrzegawcze:** Widoki usuwania (`Delete.cshtml`) zostały przeprojektowane na e-komercyjne alerty bezpieczeństwa informujące o integralności bazy danych (ochrona przed usunięciem trenera/kategorii powiązanych z aktywnymi kursami).
 ---
 
 ## 🛠️ Stos Technologiczny
@@ -58,7 +56,7 @@ Aby uruchomić projekt lokalnie na swoim komputerze, wykonaj poniższe kroki:
 
 1. **Sklonuj repozytorium:**
    ```bash
-   git clone [https://github.com/twoj-username/courses-catalog-cms.git](https://github.com/twoj-username/courses-catalog-cms.git)
+   git clone [https://github.com/shaladyna/courses-catalog-cms.git](https://github.com/shaladyna/courses-catalog-cms.git)
    cd courses-catalog-cms
    ```
 2. **Przywróć pakiety NuGet:**
@@ -69,8 +67,20 @@ Aby uruchomić projekt lokalnie na swoim komputerze, wykonaj poniższe kroki:
    String w pliku appsettings.json. Następnie w Konsoli Menedżera Pakietów (Package Manager Console) uruchom:
    ```
    Update-Database
+   ```
    Alternatywnie przez .NET CLI:
-4.
-   
+   ```bash
+   dotnet ef database update
+   ```
+4. **Uruchom aplikację:**
+   ```bash
+   dotnet run
+   ```
+   Aplikacja będzie dostępna pod adresem wskazanym w konsoli (standardowo https://localhost:7193 lub http://localhost:5242).
 
-     
+🎨 Galeria i Przegląd Interfejsu
+Strona Główna: Dynamiczny baner "Hero" z filtrem nałożonym na zdjęcie z Unsplash, zaokrąglone kafelki z cieniami box-shadow, wyrównane przyciski akcji za pomocą Flexbox, automatyczne dopasowywanie długości nazwisk trenerów, miniaturowe okrągłe avatary prowadzących w stopce karty.
+
+Panel Administracyjny: Tabele zamknięte w responsywnych kontenerach z przyciskami akcji oraz podglądem miniaturek zdjęć w rzędach tabeli.
+
+Projekt przygotowany w ramach zaliczenia przedmiotu akademickiego     
