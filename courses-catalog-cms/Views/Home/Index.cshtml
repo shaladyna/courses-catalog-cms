@@ -34,8 +34,8 @@
             </div>
         </form>
     </div>
-
-    <div class="row row-cols-1 row-cols-md-3 g-4 mb-5">
+    <div id="course-catalog">
+        <div class="row row-cols-1 row-cols-md-3 g-4 mb-5 fade-in-up">
         @if (!Model.Any())
         {
             <div class="col-12 d-flex flex-column align-items-center justify-content-center py-5 w-100 text-center">
@@ -94,7 +94,7 @@
         }
     </div> @if (ViewBag.TotalPages > 1)
     {
-        <nav aria-label="Nawigacja stron" class="mt-5 mb-5 d-flex justify-content-center">
+            <nav aria-label="Nawigacja stron" class="mt-5 mb-5 d-flex justify-content-center">
             <ul class="pagination pagination-lg gap-2">
 
                 <li class="page-item @(ViewBag.CurrentPage == 1 ? "disabled" : "")">
@@ -130,5 +130,63 @@
             </ul>
         </nav>
     }
+    </div>
 
 </div>
+
+@section Scripts {
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+
+            document.addEventListener('click', async function (e) {
+
+                let paginationLink = e.target.closest('.pagination a');
+
+                if (paginationLink) {
+                    e.preventDefault(); 
+
+                    let targetUrl = paginationLink.href;
+                    let catalogContainer = document.getElementById('course-catalog');
+
+                    catalogContainer.style.opacity = '0.5';
+                    catalogContainer.style.transition = 'opacity 0.3s ease';
+
+                    try {
+                        let response = await fetch(targetUrl);
+                        let htmlText = await response.text();
+
+                        let parser = new DOMParser();
+                        let doc = parser.parseFromString(htmlText, 'text/html');
+
+                        let newContent = doc.getElementById('course-catalog').innerHTML;
+
+                        catalogContainer.innerHTML = newContent;
+                        catalogContainer.style.opacity = '1';
+
+                        window.history.pushState({}, '', targetUrl);
+
+                        let newGrid = catalogContainer.querySelector('.fade-in-up');
+                        if (newGrid) {
+                            newGrid.classList.remove('fade-in-up');
+                            void newGrid.offsetWidth; 
+                            newGrid.classList.add('fade-in-up');
+                        }
+
+                        window.scrollTo({
+                            top: catalogContainer.offsetTop - 50,
+                            behavior: 'smooth'
+                        });
+
+                    } catch (error) {
+                        console.error('Błąd podczas ładowania kursów:', error);
+                        window.location.href = targetUrl;
+                    }
+                }
+            });
+
+            window.addEventListener('popstate', function () {
+                window.location.reload();
+            });
+        });
+    </script>
+}
