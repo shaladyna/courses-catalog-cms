@@ -66,6 +66,16 @@ namespace courses_catalog_cms.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Create([Bind("Id,Title,Description,Price,CategoryId,TrainerId")] Course course, IFormFile? imageFile)
         {
+            if (imageFile != null && imageFile.Length > 0)
+            {
+                var allowedExtensions = new[] { ".jpg", ".jpeg", ".png", ".gif", ".webp" };
+                var extension = Path.GetExtension(imageFile.FileName).ToLowerInvariant();
+
+                if (!allowedExtensions.Contains(extension))
+                {
+                    ModelState.AddModelError("", "Niedozwolony format pliku! Obsługiwane są tylko obrazy (.jpg, .png, .gif, .webp).");
+                }
+            }
             if (ModelState.IsValid)
             {
                 if (imageFile != null && imageFile.Length > 0)
@@ -134,6 +144,17 @@ namespace courses_catalog_cms.Controllers
             if (id != course.Id)
             {
                 return NotFound();
+            }
+
+            if (imageFile != null && imageFile.Length > 0)
+            {
+                var allowedExtensions = new[] { ".jpg", ".jpeg", ".png", ".gif", ".webp" };
+                var extension = Path.GetExtension(imageFile.FileName).ToLowerInvariant();
+
+                if (!allowedExtensions.Contains(extension))
+                {
+                    ModelState.AddModelError("", "Niedozwolony format pliku! Obsługiwane są tylko obrazy (.jpg, .png, .gif, .webp).");
+                }
             }
 
             if (ModelState.IsValid)
