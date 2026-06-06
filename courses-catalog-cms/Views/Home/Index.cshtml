@@ -38,10 +38,12 @@
     <div class="row row-cols-1 row-cols-md-3 g-4 mb-5">
         @if (!Model.Any())
         {
-            <div class="col-12 text-center mt-5">
-                <i class="bi bi-search display-1 text-muted opacity-50 mb-3 d-block"></i>
-                <h4 class="text-muted">Niestety, nie znaleźliśmy kursów spełniających te kryteria.</h4>
-                <a asp-action="Index" class="btn btn-outline-primary mt-3">Pokaż wszystkie kursy</a>
+            <div class="col-12 d-flex flex-column align-items-center justify-content-center py-5 w-100 text-center">
+                <i class="bi bi-search display-1 text-muted opacity-25 mb-4"></i>
+                <h4 class="text-muted fw-normal mb-4">Niestety, nie znaleźliśmy kursów spełniających te kryteria.</h4>
+                <a asp-action="Index" class="btn btn-outline-primary px-4 py-2 rounded-pill fw-medium shadow-sm">
+                    Pokaż wszystkie kursy
+                </a>
             </div>
         }
         else

@@ -59,7 +59,6 @@ namespace courses_catalog_cms.Controllers
             ViewBag.Trainers = _context.Trainers.ToList();
             return View();
         }
-
         // POST: Courses/Create
         // To protect from overposting attacks, enable the specific properties you want to bind to.
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
@@ -100,7 +99,8 @@ namespace courses_catalog_cms.Controllers
             }
 
             ViewData["CategoryId"] = new SelectList(_context.Categories, "Id", "Name", course.CategoryId);
-            ViewData["TrainerId"] = new SelectList(_context.Trainers, "Id", "FullName", course.TrainerId);
+            ViewBag.Trainers = _context.Trainers.ToList();
+
             return View(course);
         }
 

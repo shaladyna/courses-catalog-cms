@@ -54,9 +54,12 @@
                             <label asp-for="TrainerId" class="form-label fw-bold text-muted">Prowadzący</label>
                             <select asp-for="TrainerId" id="trainerSelect" class="form-select bg-light">
                                 <option value="">-- Wybierz trenera --</option>
-                                @foreach (var trainer in (IEnumerable<courses_catalog_cms.Models.Trainer>)ViewBag.Trainers)
+                                @if (ViewBag.Trainers != null)
                                 {
-                                    <option value="@trainer.Id" data-bio="@trainer.Bio" data-img="@trainer.ImageUrl">@trainer.FullName</option>
+                                    @foreach (var trainer in (IEnumerable<courses_catalog_cms.Models.Trainer>)ViewBag.Trainers)
+                                    {
+                                        <option value="@trainer.Id" data-bio="@trainer.Bio" data-img="@trainer.ImageUrl">@trainer.FullName</option>
+                                    }
                                 }
                             </select>
                             <span asp-validation-for="TrainerId" class="text-danger"></span>
