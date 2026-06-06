@@ -1,4 +1,4 @@
-# EduCatalog CMS 🎓
+# EduCatalog CMS 
 
 **EduCatalog CMS** to nowoczesny, lekki system zarządzania treścią w architekturze MVP, dedykowany dla rynku platform e-learningowych, akademii szkoleniowych oraz niezależnych twórców internetowych. Aplikacja pozwala na kompleksowe zarządzanie katalogiem kursów, ich kategoriami oraz bazą prowadzących.
 
@@ -6,7 +6,7 @@ Projekt został zbudowany w oparciu o platformę **.NET 8** przy użyciu wzorca 
 
 ---
 
-## 💼 Wartość Biznesowa projektu
+## Wartość Biznesowa projektu
 
 Większość dostępnych na rynku systemów LMS jest droga, przeładowana funkcjami i trudna w konfiguracji. **EduCatalog CMS** rozwiązuje ten problem, dostarczając dedykowane narzędzie marketingowo-sprzedażowe:
 1. **Zwiększenie Konwersji Sprzedażowej:** Dzięki architekturze *Mobile-First* oraz zaawansowanemu filtrowaniu, potencjalny klient może znaleźć i przejrzeć ofertę szkoleniową w kilka sekund na dowolnym urządzeniu.
@@ -15,7 +15,7 @@ Większość dostępnych na rynku systemów LMS jest droga, przeładowana funkcj
 
 ---
 
-## 🚀 Kluczowe Funkcjonalności
+## Kluczowe Funkcjonalności
 
 ### 🔹 Backend i Baza Danych
 * **Pełny system CRUD:** Kompletne operacje zapisu, odczytu, edycji i usuwania dla Kursów, Kategorii oraz Trenerów.
@@ -31,7 +31,7 @@ Większość dostępnych na rynku systemów LMS jest droga, przeładowana funkcj
 * **Ekrany Ostrzegawcze:** Widoki usuwania (`Delete.cshtml`) zostały przeprojektowane na e-komercyjne alerty bezpieczeństwa informujące o integralności bazy danych (ochrona przed usunięciem trenera/kategorii powiązanych z aktywnymi kursami).
 ---
 
-## 🛠️ Stos Technologiczny
+## Stos Technologiczny
 
 * **Język programowania:** C# (.NET 8)
 * **Framework:** ASP.NET Core MVC
@@ -41,7 +41,7 @@ Większość dostępnych na rynku systemów LMS jest droga, przeładowana funkcj
 
 ---
 
-## 🗄️ Struktura Bazy Danych (Encje)
+## Struktura Bazy Danych (Encje)
 
 System bazuje na trzech powiązanych ze sobą modelach relacyjnych:
 1. **Course (Kurs):** Posiada pola: `Id`, `Title`, `Description`, `Price`, `ImageUrl`, `CategoryId` (Klucz obcy), `TrainerId` (Klucz obcy).
@@ -50,7 +50,7 @@ System bazuje na trzech powiązanych ze sobą modelach relacyjnych:
 
 ---
 
-## 💻 Instrukcja Uruchomienia
+## Instrukcja Uruchomienia
 
 Aby uruchomić projekt lokalnie na swoim komputerze, wykonaj poniższe kroki:
 
@@ -78,7 +78,7 @@ Aby uruchomić projekt lokalnie na swoim komputerze, wykonaj poniższe kroki:
    ```
    Aplikacja będzie dostępna pod adresem wskazanym w konsoli (standardowo https://localhost:7193 lub http://localhost:5242).
 
-🎨 Galeria i Przegląd Interfejsu
+Galeria i Przegląd Interfejsu
 Strona Główna: Dynamiczny baner "Hero" z filtrem nałożonym na zdjęcie z Unsplash, zaokrąglone kafelki z cieniami box-shadow, wyrównane przyciski akcji za pomocą Flexbox, automatyczne dopasowywanie długości nazwisk trenerów, miniaturowe okrągłe avatary prowadzących w stopce karty.
 
 Panel Administracyjny: Tabele zamknięte w responsywnych kontenerach z przyciskami akcji oraz podglądem miniaturek zdjęć w rzędach tabeli.
