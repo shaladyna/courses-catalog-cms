@@ -4,7 +4,6 @@
     ViewData["Title"] = "Najlepsze kursy w sieci";
 }
 
-<!-- Hero Section ze zdjęciem w tle -->
 <div class="p-5 text-center bg-image rounded-3 mb-5 shadow" style="background: linear-gradient(rgba(30, 27, 75, 0.7), rgba(17, 24, 39, 0.9)), url('https://images.unsplash.com/photo-1522202176988-66273c2fd55f?ixlib=rb-4.0.3&auto=format&fit=crop&w=1920&q=80') center/cover no-repeat; color: white; padding-top: 120px !important; padding-bottom: 120px !important; margin-top: -16px; margin-left: -15px; margin-right: -15px; border-radius: 0 !important;">
     <div class="container">
         <h1 class="display-3 fw-bold mb-3 shadow-sm">Zainwestuj w swoją przyszłość</h1>
@@ -13,6 +12,7 @@
 </div>
 
 <div class="container">
+
     <div class="search-form-container mb-5">
         <form asp-action="Index" method="get">
             <div class="row g-3 align-items-center">
@@ -90,5 +90,43 @@
                 </div>
             }
         }
-    </div>
+    </div> @if (ViewBag.TotalPages > 1)
+    {
+        <nav aria-label="Nawigacja stron" class="mt-5 mb-5 d-flex justify-content-center">
+            <ul class="pagination pagination-lg gap-2">
+
+                <li class="page-item @(ViewBag.CurrentPage == 1 ? "disabled" : "")">
+                    <a class="page-link rounded-pill px-4 shadow-sm fw-medium border-0 text-dark" asp-action="Index"
+                       asp-route-page="@(ViewBag.CurrentPage - 1)"
+                       asp-route-searchString="@ViewData["CurrentSearch"]"
+                       asp-route-categoryId="@ViewData["CurrentCategory"]">
+                        &laquo; Poprzednia
+                    </a>
+                </li>
+
+                @for (int i = 1; i <= ViewBag.TotalPages; i++)
+                {
+                    <li class="page-item @(ViewBag.CurrentPage == i ? "active" : "")">
+                        <a class="page-link rounded-circle shadow-sm border-0 fw-bold d-flex align-items-center justify-content-center"
+                           style="width: 48px; height: 48px;"
+                           asp-action="Index"
+                           asp-route-page="@i"
+                           asp-route-searchString="@ViewData["CurrentSearch"]"
+                           asp-route-categoryId="@ViewData["CurrentCategory"]">@i</a>
+                    </li>
+                }
+
+                <li class="page-item @(ViewBag.CurrentPage == ViewBag.TotalPages ? "disabled" : "")">
+                    <a class="page-link rounded-pill px-4 shadow-sm fw-medium border-0 text-dark" asp-action="Index"
+                       asp-route-page="@(ViewBag.CurrentPage + 1)"
+                       asp-route-searchString="@ViewData["CurrentSearch"]"
+                       asp-route-categoryId="@ViewData["CurrentCategory"]">
+                        Następna &raquo;
+                    </a>
+                </li>
+
+            </ul>
+        </nav>
+    }
+
 </div>

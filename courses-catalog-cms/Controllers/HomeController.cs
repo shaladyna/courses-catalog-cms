@@ -18,28 +18,41 @@ namespace courses_catalog_cms.Controllers
             _context = context;
         }
 
-        public async Task<IActionResult> Index(string searchString, int? categoryId)
+        public async Task<IActionResult> Index(string searchString, int? categoryId, int page = 1)
         {
-            var courses = _context.Courses
+            int pageSize = 9;
+
+            var coursesQuery = _context.Courses
                 .Include(c => c.Category)
                 .Include(c => c.Trainer)
                 .AsQueryable();
 
             if (!string.IsNullOrEmpty(searchString))
             {
-                courses = courses.Where(c => c.Title.Contains(searchString) ||
-                                            (c.Description != null && c.Description.Contains(searchString)));
+                coursesQuery = coursesQuery.Where(c => c.Title.Contains(searchString) || c.Description.Contains(searchString));
             }
 
             if (categoryId.HasValue)
             {
-                courses = courses.Where(c => c.CategoryId == categoryId.Value);
+                coursesQuery = coursesQuery.Where(c => c.CategoryId == categoryId);
             }
 
+            int totalItems = await coursesQuery.CountAsync();
+
+            int totalPages = (int)Math.Ceiling(totalItems / (double)pageSize);
+
+            var paginatedCourses = await coursesQuery
+                .Skip((page - 1) * pageSize)
+                .Take(pageSize)
+                .ToListAsync();
+
             ViewData["CurrentSearch"] = searchString;
+            ViewData["CurrentCategory"] = categoryId;
+            ViewBag.CurrentPage = page;
+            ViewBag.TotalPages = totalPages;
             ViewData["CategoryId"] = new SelectList(_context.Categories, "Id", "Name", categoryId);
 
-            return View(await courses.ToListAsync());
+            return View(paginatedCourses);
         }
         public async Task<IActionResult> Details(int? id)
         {
