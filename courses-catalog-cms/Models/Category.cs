@@ -6,11 +6,10 @@ namespace courses_catalog_cms.Models
     {
         public int Id { get; set; }
 
-        [Required(ErrorMessage = "Nazwa kategorii jest wymagana")]
-        [Display(Name = "Nazwa kategorii")]
-        public string Name { get; set; }
+        [Required(ErrorMessage = "Nazwa kategorii jest wymagana.")]
+        [StringLength(50, ErrorMessage = "Nazwa kategorii nie może przekraczać 50 znaków.")]
+        public string Name { get; set; } = string.Empty;
 
-        // Relacja: Jedna kategoria ma wiele kursów
-        public List<Course>? Courses { get; set; }
+        public ICollection<Course>? Courses { get; set; }
     }
 }
