@@ -60,4 +60,17 @@ Aby uruchomić projekt lokalnie na swoim komputerze, wykonaj poniższe kroki:
    ```bash
    git clone [https://github.com/twoj-username/courses-catalog-cms.git](https://github.com/twoj-username/courses-catalog-cms.git)
    cd courses-catalog-cms
+   ```
+2. **Przywróć pakiety NuGet:**
+   ```bash
+   dotnet restore
+3. **Wykonaj migrację bazy danych:**
+   Upewnij się, że masz poprawnie skonfigurowany Connection
+   String w pliku appsettings.json. Następnie w Konsoli Menedżera Pakietów (Package Manager Console) uruchom:
+   ```
+   Update-Database
+   Alternatywnie przez .NET CLI:
+4.
+   
+
      
